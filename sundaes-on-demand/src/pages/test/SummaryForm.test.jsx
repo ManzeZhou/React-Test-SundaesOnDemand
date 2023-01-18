@@ -39,6 +39,7 @@ test("popover responds to hover", async () =>{
     render(<SummaryForm />);
 
     //popover starts out hidden/not on the page: test sth that is not showing can not use getByRole
+    // query: not exist
     const nullPopover = screen.queryByText(/no ice cream will actually be delivered/i);
     expect(nullPopover).not.toBeInTheDocument();
 

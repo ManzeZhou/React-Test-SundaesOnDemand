@@ -1,6 +1,6 @@
 import {server} from "../../../mocksServer/server";
 import {rest} from "msw";
-import {render, screen, waitFor} from "@testing-library/react";
+import {render, screen, waitFor} from "../../../test-utils/testing-library-utils";
 import OrderEntry from "../OrderEntry";
 
 //run only one test in a file to isolate a test
@@ -19,7 +19,7 @@ test.only('handles errors for scoops and toppings routes', async () => {
 
     // situation: await for only one alterBanner and then run the following code without finding the second
     // solution: wait for
-    waitFor (async () => {
+    await waitFor(async () => {
         const alerts = await screen.findAllByRole('alert');
 
         expect(alerts).toHaveLength(2);
