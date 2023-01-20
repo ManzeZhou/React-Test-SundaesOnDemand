@@ -8,6 +8,7 @@ import {pricePerItem} from "../../constants";
 import {formatCurrency} from "../../utilities";
 import useOrderDetails from "../../context/OrderDetails";
 
+
 export default function Options({ optionType }) {
     const [items, setItems] = useState([]);
 
@@ -19,15 +20,27 @@ export default function Options({ optionType }) {
 
     // optionType is 'scoops' or 'toppings
     useEffect(() => {
+        // create an abortController to attach to network request
+        // network call can be canceled when component exits
+        const controller = new AbortController();
         axios
-            .get(`http://localhost:3030/${optionType}`)
+            .get(`http://localhost:3030/${optionType}`, {
+                signal: controller.signal,
+            })
             .then((response) => setItems(response.data))
-            .catch((error) =>
-                setError(true));
+            .catch((error) => setError(true)
+              //  setError(true)
+            );
+
+        // abort axios call on component unmount
+        return () => {
+            controller.abort();
+        };
     }, [optionType]);
 
     if (error) {
-        return <AlertBanner />
+        // @ts-ignore
+        return <AlertBanner />;
     }
 
     const ItemComponent = optionType === "scoops" ? ScoopOption : ToppingOption;
