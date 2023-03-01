@@ -28,7 +28,11 @@ export default function Options({ optionType }) {
                 signal: controller.signal,
             })
             .then((response) => setItems(response.data))
-            .catch((error) => setError(true)
+            .catch((error) => {
+                if(error.name !== 'CanceledError') {
+                    setError(true)
+                }
+                }
               //  setError(true)
             );
 

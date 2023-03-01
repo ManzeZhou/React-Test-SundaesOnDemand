@@ -30,7 +30,7 @@ export default function SummaryForm({setOrderPhase}) {
             <span style={{color: 'blue'}}>Terms and Conditions</span>
         </OverlayTrigger>
         </span>)
-    return (<Form>
+    return (<Form onSubmit={handleSubmit}>
             <Form.Group controlId="terms-and-conditions">
                 <Form.Check
                     type="checkbox"

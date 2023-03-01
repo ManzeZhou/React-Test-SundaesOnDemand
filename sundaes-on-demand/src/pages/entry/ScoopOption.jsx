@@ -2,12 +2,33 @@ import Col from 'react-bootstrap/Col';
 import userOrderDetails from "../../context/OrderDetails";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
+import {useState} from "react";
 
 export default function ScoopOption({name, imagePath}) {
 
     const {updateItemCount} = userOrderDetails();
 
-    const handleChange = (e) => updateItemCount(name, parseInt( e.target.value),'scoops');
+    const [isValid, setIsValid] = useState(true);
+
+    const handleChange = (event) => {
+        const currentValue = event.target.value;
+
+        // make sure we're using a number and not a string to validate
+        const currentValueFloat = parseFloat(currentValue);
+        const valueIsValid =
+            0 <= currentValueFloat &&
+            currentValueFloat <= 10 &&
+            Math.floor(currentValueFloat) === currentValueFloat;
+
+        //validate
+        setIsValid(valueIsValid);
+
+        // update scoop count to 0 if value is invalid
+        const newValue = valueIsValid ? parseInt(currentValue) : 0;
+
+        // only update context if the value is valid
+        updateItemCount(name, parseInt(currentValue), 'scoops')
+    }
 
     return <Col xs={12} sm={6} md={4} lg={3} style={{textAlign: 'center'}}>
         <img
@@ -23,7 +44,9 @@ export default function ScoopOption({name, imagePath}) {
                 <Form.Control
                     type='number'
                     defaultValue={0}
-                    onChange={handleChange}/>
+                    onChange={handleChange}
+                    isInvalid={!isValid}
+                />
             </Col>
         </Form.Group>
     </Col>
